@@ -1,0 +1,260 @@
+﻿@using TeknikServis.BLL.Account
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic' rel='stylesheet' type='text/css'>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/jquery.bxslider.css" rel="stylesheet" />
+    <link href="~/css/owl.carousel.css" rel="stylesheet" />
+    <link href="~/css/owl.theme.css" rel="stylesheet" />
+    <!-- REVOLUTION STYLE SHEETS -->
+    <link href="~/css/settings.css" rel="stylesheet" />
+    <!-- REVOLUTION LAYERS STYLES -->
+    <link href="~/css/layers.css" rel="stylesheet" />
+    <!-- REVOLUTION NAVIGATION STYLES -->
+    <link href="~/css/navigation.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/css/loginregister.css" rel="stylesheet" />
+    <!--JQUERY BAZI SAYFA AÇILIŞLARINDA KULLANILDIĞI İÇİN BURAYA ALDIM-->
+    <script src="~/Scripts/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <!-- Header
+                ================================================== -->
+        <header class="clearfix">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="top-line">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <ul class="info-list">
+                                   
+                                    <li>
+                                        <i class="fa fa-phone"></i>
+                                        Telefon:
+                                        <span>+1 223 334 3434</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-clock-o"></i>
+                                        Çalışma Saatleri:
+                                        <span>08:00 - 17:00</span>
+                                    </li>
+                                    @if (HttpContext.Current.User.IsInRole("Admin"))
+                                    {
+                                        <li><i class="fa fa-lock"></i><a href="@Url.Action("Index", "Admin",new {Area = "Yonetim" })">Admin Paneli</a></li>
+                                    }
+                                    @if (HttpContext.Current.User.IsInRole("Operator"))
+                                    {
+                                        <li><i class="fa fa-lock"></i><a href="@Url.Action("Index", "Operator",new {Area = "Yonetim" })">Operatör Paneli</a></li>
+                                    }
+                                    @if (HttpContext.Current.User.IsInRole("Teknisyen"))
+                                    {
+                                        <li><i class="fa fa-lock"></i><a href="@Url.Action("Index", "Teknisyen",new {Area = "Yonetim" })">Teknisyen Paneli</a></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul class="social-icons">
+                                    <li>
+                                        <span class=" ">Hoşgeldin @MembershipTools.GetNameSurname()</span>
+                                    </li>
+                                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                                    {
+
+                                        <li><a href="@Url.Action("Profile", "Account")"><i class="fa fa-user"></i> Profilim</a></li>
+                                        <li><a href="/Account/Logout"><i class="fa fa-sign-out"></i> Çıkış Yap</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="/Account/Login"><i class="fa fa-sign-in"></i> Giriş Yap</a></li>
+                                        <li><a href="/Account/Register"><i class="fa fa-user"></i> Kayıt Ol</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Home/Index"><img src="~/Content/images/logo.png" alt=""></a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="active" href="/Home/Index">Anasayfa</a></li>
+                            <li><a href="/Home/About">Hakkımızda</a></li>
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Destek
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="@Url.Action("DestekTalep","Home")">Talep Oluştur</a></li>
+                                        <li><a href="@Url.Action("DestekTalepListesi","Home")">Tüm Destek Talepleri</a></li>
+                                    </ul>
+                                </li>
+
+                            }
+                            <li><a href="/Home/Contact">İletişim</a></li>
+
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        </header>
+        <!-- End Header -->
+
+
+        <div>
+            @RenderBody()
+        </div>
+
+
+        <!-- footer
+        ================================================== -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="contact-info">
+                            <h2><i class="fa fa-location-arrow"></i> Adres</h2>
+                            <p>KLY Teknik Servis 25662Beşiktaş, NO:9 </br> İstanbul, TURKİYE</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="contact-info">
+                            <h2><i class="fa fa-envelope-o"></i> İletişim</h2>
+                            <p>+1 223 334 3434 <br> info@klyteknikservis.com</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="contact-info">
+                            <h2><i class="fa fa-clock-o"></i>Çalışma Saatleri</h2>
+                            <p>Pazartesi - Cuma: 8:00 - 18:00 <br> Cumartesi : 9:00 - 14:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End footer -->
+
+        
+        <script src="~/Scripts/jquery.migrate.js"></script>
+        <script src="~/Scripts/jquery.bxslider.min.js"></script>
+        <script src="~/Scripts/jquery.appear.js"></script>
+        <script src="~/Scripts/jquery.countTo.js"></script>
+        <script src="~/Scripts/owl.carousel.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/jquery.imagesloaded.min.js"></script>
+        <script src="~/Scripts/retina-1.1.0.min.js"></script>
+        <script src="~/Scripts/jquery.themepunch.tools.min.js"></script>
+        <script src="~/Scripts/jquery.themepunch.revolution.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.actions.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.carousel.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.kenburn.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.layeranimation.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.migration.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.navigation.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.parallax.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.slideanims.min.js"></script>
+        <script src="~/Scripts/extensions/revolution.extension.video.min.js"></script>
+        <script src="~/Scripts/script.js"></script>
+
+
+        <script type="text/javascript">
+            var tpj = jQuery;
+            var revapi66;
+            tpj(document).ready(function () {
+                if (tpj("#rev_slider_66_1").revolution == undefined) {
+                    revslider_showDoubleJqueryError("#rev_slider_66_1");
+                } else {
+                    revapi66 = tpj("#rev_slider_66_1").show().revolution({
+                        sliderType: "standard",
+                        jsFileLocation: "js/",
+                        sliderLayout: "fullwidth",
+                        dottedOverlay: "none",
+                        gridheight: 600,
+                        gridwidth: 1140,
+                        delay: 9000,
+                        navigation: {
+                            keyboardNavigation: "off",
+                            keyboard_direction: "horizontal",
+                            mouseScrollNavigation: "off",
+                            onHoverStop: "off",
+                            touch: {
+                                touchenabled: "on",
+                                swipe_threshold: 75,
+                                swipe_min_touches: 1,
+                                swipe_direction: "vertical",
+                                drag_block_vertical: false
+                            },
+                            arrows: {
+                                style: "uranus",
+                                enable: true,
+                                hide_onmobile: true,
+                                hide_under: 778,
+                                hide_onleave: true,
+                                hide_delay: 200,
+                                hide_delay_mobile: 1200,
+                                tmp: '',
+                                left: {
+                                    h_align: "left",
+                                    v_align: "center",
+                                    h_offset: 20,
+                                    v_offset: 0
+                                },
+                                right: {
+                                    h_align: "right",
+                                    v_align: "center",
+                                    h_offset: 20,
+                                    v_offset: 0
+                                }
+                            }
+                        },
+                        lazyType: "none",
+                        shadow: 0,
+                        spinner: "off",
+                        stopLoop: "on",
+                        stopAfterLoops: 0,
+                        stopAtSlide: 1,
+                        shuffle: "off",
+                        autoHeight: "off",
+                        fullScreenAlignForce: "off",
+                        fullScreenOffsetContainer: "",
+                        fullScreenOffset: "",
+                        disableProgressBar: "on",
+                        hideThumbsOnMobile: "off",
+                        hideSliderAtLimit: 0,
+                        hideCaptionAtLimit: 0,
+                        hideAllCaptionAtLilmit: 0,
+                        debugMode: false,
+                        fallbacks: {
+                            simplifyAll: "off",
+                            nextSlideOnWindowFocus: "off",
+                            disableFocusListener: false,
+                        }
+                    });
+                }
+            });	/*ready*/
+        </script>
+    </div>
+</body>
+</html>

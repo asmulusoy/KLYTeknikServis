@@ -1,0 +1,208 @@
+﻿@using Microsoft.AspNet.Identity
+@using TeknikServis.BLL.Account
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE/dist/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE/dist/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE/dist/css/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link href="~/Content/AdminLTE/dist/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="skin-blue sidebar-mini" style="height: auto; min-height: 100%;">
+    <div class="wrapper" style="height: auto; min-height: 100%;">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>KLY</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>KLY </b>Teknik Servis</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Navigasyon</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/AdminLTE/images/admin.png" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@MembershipTools.GetNameSurname()</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Content/AdminLTE/images/admin.png" class="img-circle" alt="User Image">
+                                    <p>
+                                        @MembershipTools.GetNameSurname() <br>
+                                        Kullanıcı Adı : @HttpContext.Current.User.Identity.Name
+                                        <small>@DateTime.Now.ToShortDateString()</small>
+                                    </p>
+                                </li>
+
+
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="@Url.Action("Profile","Account", new { area = "" })" class="btn btn-default btn-flat">Profil</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("Logout","Account", new { area = "" })" class="btn btn-default btn-flat">Çıkış Yap</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                @if (HttpContext.Current.User.IsInRole("Admin"))
+                {
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="header">GENEL AYARLAR</li>
+                        <li><a href="@Url.Action("Index","Admin")"><i class="fa fa-home"></i>  <span> Genel Görünüm</span></a></li>
+                        <li><a href="@Url.Action("Index","Kategori")"><i class="fa fa-tasks"></i>  <span> Kategori İşlemleri</span></a></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-users"></i> <span>Kullanıcı Yönetimi</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="@Url.Action("KullaniciEkle","Kullanici")"><i class="fa fa-user-plus"></i> Yeni Kullanıcı</a></li>
+                                <li><a href="@Url.Action("Index","Kullanici")"><i class="fa fa-list"></i> Kullanıcı Listesi</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="@Url.Action("Index","ServisTalep")"><i class="fa fa-list"></i><span> Servis Talep Listesi</span> </a></li>
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-bar-chart"></i> <span>Anket Yönetimi</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="@Url.Action("AnketEkle","Anket")"><i class="fa fa-plus-circle"></i> Yeni Anket Oluştur</a></li>
+                                <li><a href="@Url.Action("Index","Anket")"><i class="fa fa-list"></i> Anket Listesi</a></li>
+                            </ul>
+                        </li>
+                        <li class="header">Linkler</li>
+                        <li><a href="@Url.Action("Index","Home",new {area="" })"><i class="fa fa-circle-o text-aqua"></i> <span>Anasayfaya Git</span></a></li>
+                    </ul>
+                }
+                else if (HttpContext.Current.User.IsInRole("Operator"))
+                {
+                    <ul class="sidebar-menu" data-widget="tree" style="height:100%" ;>
+                        <li class="header">GENEL AYARLAR</li>
+                        <li><a href="@Url.Action("AktifServisTalepleri","ServisTalep")"><i class="fa fa-home"></i><span>Genel Görünüm</span> </a></li>
+                        <li><a href="@Url.Action("Index","ServisTalep")"><i class="fa fa-list"></i><span> Servis Talep Listesi</span> </a></li>
+
+                        <li class="header">Linkler</li>
+                        <li><a href="@Url.Action("Index","Home",new {area="" })"><i class="fa fa-circle-o text-aqua"></i> <span>Anasayfaya Git</span></a></li>
+                    </ul>
+                }
+                else if (HttpContext.Current.User.IsInRole("Teknisyen"))
+                {
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="header">SERVİS TALEP LİSTELERİ</li>
+                        <li><a href="@Url.Action("TeknisyeneGoreAktifServisTalepleri","ServisTalep",new {id=User.Identity.GetUserId()})"><i class="fa fa-list"></i><span>Aktif Talep Listesi</span> </a></li>
+                        <li><a href="@Url.Action("TeknisyeneGoreTamamlanmisServisTalepleri","ServisTalep",new {id=User.Identity.GetUserId()})"><i class="fa fa-list"></i><span>Sonuçlanmış Talep Listesi</span> </a></li>
+
+                        <li class="header">Linkler</li>
+                        <li><a href="@Url.Action("Index","Home", new { area="" })"><i class="fa fa-circle-o text-aqua"></i> <span>Anasayfa</span></a></li>
+                    </ul>
+                }
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+
+
+        @RenderBody()
+
+
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2018 <a href="#">KLY Teknik Servis</a>.</strong> All rights reserved.
+        </footer>
+
+    </div>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/fastclick.js"></script>
+    <script src="~/Content/AdminLTE/dist/js/adminlte.min.js"></script>
+    <script src="~/Content/AdminLTE/dist/js/demo.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.sidebar-menu').tree();
+            //lightbox başlangıcı
+            var $lightbox = $('#lightbox');
+
+            $('[data-target="#lightbox"]').on('click', function (event) {
+                var $img = $(this).find('img'),
+                    src = $img.attr('src'),
+                    alt = $img.attr('alt'),
+                    css = {
+                        'maxWidth': $(window).width() - 100,
+                        'maxHeight': $(window).height() - 100
+                    };
+                $lightbox.find('.close').addClass('hidden');
+                $lightbox.find('img').attr('src', src);
+                $lightbox.find('img').attr('alt', alt);
+                $lightbox.find('img').css(css);
+            });
+
+            $lightbox.on('shown.bs.modal', function (e) {
+                var $img = $lightbox.find('img');
+
+                $lightbox.find('.modal-dialog').css({ 'width': $img.width() });
+                $lightbox.find('.close').removeClass('hidden');
+            });
+            // --lightbox bitişi
+            //--Sidebar boyutunu içerik boyutu ile eşitledim.
+            //$('.main-sidebar').outerHeight($('body')[0].scrollHeight);
+
+        })
+    </script>
+    @RenderSection("SayfaSonu", false);
+</body>
+</html>
+

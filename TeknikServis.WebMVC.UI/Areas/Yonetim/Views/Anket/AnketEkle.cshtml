@@ -1,0 +1,112 @@
+﻿@using TeknikServis.Entity.ViewsModel.AdminViewModels
+@model  AnketViewModel
+@{
+    ViewBag.Title = "AnketEkle";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Anket Oluştur
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="box">
+                    <div class="box-header">
+                        <h3>Anket Bilgileri</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <form action="/action_page.php">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="anketadi" placeholder="ANKET BAŞLIĞI">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-10"><input id="soru" type="text" class="form-control" placeholder="Soru metni"></div>
+                                <div class="col-md-2"><button type="button" onclick="soruekle()" class="btn btn-success pull-right"><i class="fa fa-plus"></i>Soru Ekle</button>  </div>
+                            </div>
+                            <div class="col-md-12" id="sorulistesi"></div>
+                            <button type="button" onclick="anketolustur()" class="btn btn-primary btn-block">Anketi Kaydet</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header">
+                        <h3>Anket Hakkında</h3>
+                    </div>
+
+                    <div class="box-body">
+                        <p>Anket seçenekleri oluştururken 5. cevap 5 puan 1. cevap 1 puan olarak puanlandırılır. </p>
+                        <p>En olumlu olan cevap 5. cevap alanına en olumsuz cevap ise 5. cevap alanına yazılmalıdır.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.col -->
+        <!-- /.row -->
+    </section>
+</div>
+@section SayfaSonu{
+    <script>
+        var sorulistesi = [];
+        var index = 1;
+        function soruekle() {
+            if ($("#soru").val() == "") {
+                alert("Lütfen soru kısmını doldurunuz.");
+                return;
+            }
+            var soru = $("#soru").val();
+            console.log(soru);
+            var postsoru = {};
+            postsoru.ID = index;
+            postsoru.SoruMetni = soru;
+            sorulistesi.push(postsoru);
+            var soruhtml = "<div id='soru" + index + "' class='list-group-item'><span>";
+            soruhtml += postsoru.SoruMetni;
+            soruhtml += "</span ><a href='javascript:sorukaldir(" + index + ");' id='" + index + "' class='pull-right remove-todo-item'><i class='fa fa-times'></i></a></div >";
+            $("#sorulistesi").append(soruhtml);
+            index++;
+            $("#soru").val("");
+        }
+        function sorukaldir(index) {
+            $("#soru" + index).remove();
+            for (var i = 0; i < sorulistesi.length; i++) {
+                if (sorulistesi[i].ID === index) {
+                    sorulistesi.splice(i, 1);
+                    break;
+                }
+            }
+            console.log(sorulistesi);
+        }
+        function anketolustur() {
+            if (sorulistesi.length < 1) {
+                alert("Lütfen en az bir soru oluşturun.");
+                return;
+            }
+            if ($("#anketadi").val() == "") {
+                alert("Lütfen ankete bir isim griniz.");
+                return;
+            }
+            var anketadi = $("#anketadi").val();
+            $.ajax({
+                url: '/Yonetim/Anket/AnketEkle',
+                type: 'POST',
+                data: { anketadi: anketadi, sorulistesi: sorulistesi },
+            }).then(function (item) {
+                alert("Anket Başarılı bir şekilde oluşturuldu.");
+                window.location.replace("/Yonetim/Anket/Index");
+            }).catch(function (err) {
+                console.log("Bir hata oluştu. Tekrar Deneyiniz.");
+                console.log(err);
+            });
+        }
+    </script>
+}

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<TeknikServis.Entity.Entities.Anket>
+
+@{
+    ViewBag.Title = "AnketListesi";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Anketler
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <table id="AnketListesiDataTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Oluşturulma Tarihi
+                                    </th>
+                                    <th>
+                                        Anket Adı
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.CreateDate.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            @item.AnketIsmi
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("AnketDetay","Anket", new {id=item.ID })"> <span class="label label-success"><i class="fa fa-edit"></i></span></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+
+@section SayfaSonu
+{
+    <script>
+        $(function () {
+            $("#AnketListesiDataTable").DataTable({
+                "order": []
+            });
+        })
+    </script>
+}

@@ -1,0 +1,65 @@
+﻿@using TeknikServis.Entity.ViewsModel
+@model KullaniciAnketiViewModel
+@{
+    ViewBag.Title = "AnketGoruntule";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+        Anket Adı : <small> @Model.anket.AnketIsmi</small>   
+        </h1>
+    </section>
+    <section class="content">
+        @foreach (var item in Model.sorular)
+        {
+            <div class="panel panel-info">
+                <div class="panel-heading">
+               Soru
+                </div>
+                <div class="panel-body"  id="@item.ID">
+                    @item.SoruMetni
+                    <button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" onclick="duzenlenecek('@item.ID','@item.SoruMetni')" data-target="#soruduzenle"><i class="fa fa-edit"></i></button>
+                </div>
+            </div>
+        }
+</section>
+    </div>
+@*DUZENLEME MODAL BASLANGIC*@
+<div class="modal fade" id="soruduzenle" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Soru Düzenle</h4>
+            </div>
+        @using (Html.BeginForm("AnketDuzenle", "Admin", FormMethod.Post))
+        {
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Soru Metni</label>
+                    @Html.AntiForgeryToken()
+                    <input type="text" id="sorumetni" name="soruMetni" class="form-control" value="" />
+                    <input type="text" id="soruid" name="soruid" value="" hidden />
+                    <input type="text" id="anketid" name="anketid" value="@Model.anket.ID" hidden />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="submit" class="btn btn-primary">Güncelle</button>
+            </div>
+        }
+    </div>
+</div>
+</div>
+
+@section SayfaSonu{
+<script>
+    function duzenlenecek(id, metin){
+        $("#sorumetni").val(metin);
+        $("#soruid").val(id);
+        console.log(id);
+        console.log(metin);
+    }
+</script>
+}

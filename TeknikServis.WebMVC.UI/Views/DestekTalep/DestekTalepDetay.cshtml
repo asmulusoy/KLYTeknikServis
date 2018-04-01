@@ -1,0 +1,174 @@
+﻿@model TeknikServis.Entity.ViewsModel.KullaniciArizaDetayViewModel
+@{
+    ViewBag.Title = "DestekTalebiOlustur";
+    Layout = "~/Views/Shared/_LayoutPageProfile.cshtml";
+}
+<section class="content-header">
+    Arıza Detayları
+</section>
+<!-- Main content -->
+<section class="content ">
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Arıza Bilgileri</h3>
+                </div>
+                <div class="box-body">
+                    @using (Html.BeginForm("DestekTalebiOlustur", "DestekTalep", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary()
+                        @Html.HiddenFor(x => x.Ariza.lat, new { id = "lat" })
+                        @Html.HiddenFor(x => x.Ariza.lng, new { id = "long" })
+
+                        <div class="form-group input-group-sm">
+                            @Html.LabelFor(x => x.Ariza.KategoriID, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(x => x.Ariza.KategoriID, (List<SelectListItem>)ViewBag.kategoriler, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group input-group-sm">
+                            @Html.LabelFor(x => x.Ariza.Baslik, new { @class = " col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(x => x.Ariza.Baslik, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group input-group-sm">
+                            @Html.LabelFor(x => x.Ariza.Aciklama, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(x => x.Ariza.Aciklama, 5, 10, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group input-group-sm">
+                            @Html.LabelFor(x => x.Ariza.AdresAciklamasi, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(x => x.Ariza.AdresAciklamasi, 5, 10, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-info box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Konum Bilgileri</h3>
+                </div>
+                <div class="box-body">
+                    <div id="map" style="height: 300px;"></div>
+                </div>
+                <div class="box-footer">*Adres haritada belirtilen alandan farklı ise haritadan işaretleyebilirsiniz.</div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Arıza Fotoğrafları</h3>
+                </div>
+                <div class="box-body"  style="overflow-x: scroll;">
+                    @foreach (var item in Model.FotografList)
+                    {
+                        <div class="col-md-2">
+                            <div class="thumbnail">
+                                <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">
+                                    <img src="@item.URL" alt="ArizaFotografi" width="150" height="100" class="margin">
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<!--LIGTBOX-->
+<div id="lightbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <button type="button" class="close hidden" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="" alt="" />
+            </div>
+        </div>
+    </div>
+</div>
+<!--LIGTBOX-->
+<!--Scriptler-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAP53g7yo4Rm0Fc5qFg7_iiK3k8AWSNuyE&libraries=places" type="text/javascript"></script>
+
+<script type="text/javascript">
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    else {
+        alert("Tarayıcınız lokasyon desteklemiyor!...")
+    }
+    function showPosition(pos) {
+        console.log(pos);
+        var lokasyonlat = pos.coords.latitude;
+        var lokasyonlong = pos.coords.longitude;
+        var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        var options = {
+            zoom: 12,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            draggableCursor: "crosshair",
+            scrollwheel: true,
+            streetViewControl: false
+        };
+        var map = new google.maps.Map(document.getElementById("map"), options);
+        var isagretci = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: "Bulunduğunuz Konum"
+        });
+        google.maps.event.addListener(map, "click", function (location) {
+            GetLocationInfo(location.latLng);
+            lokasyonlat = location.latLng.lat();
+            lokasyonlong = location.latLng.lng();
+            $("#lat").val(lokasyonlat);
+            $("#long").val(lokasyonlong);
+        });
+        function GetLocationInfo(latlng) {
+            if (latlng != null) {
+                ShowLatLong(latlng);
+            }
+        }
+        function GotoLatLong() {
+            if ($("#lat").val() != "" && $("#long").val() != "") {
+                var lat = $("#lat").val();
+                var long = $("#long").val();
+                var latLong = new google.maps.LatLng(lat, long);
+                ShowLatLong(latLong);
+                map.setCenter(latLong);
+                UpdateStreetView(latLong);
+            }
+        }
+        function ShowLatLong(latLong) {
+            if (isagretci != null) {
+                isagretci.setMap(null);
+            }
+            isagretci = new google.maps.Marker({
+                position: latLong,
+                animation: google.maps.Animation.BOUNCE,
+                map: map,
+                title: "Konumunuz"
+            });
+        }
+        $("#lat").val(lokasyonlat);
+        $("#long").val(lokasyonlong);
+    }
+</script>

@@ -1,0 +1,89 @@
+﻿@using TeknikServis.Entity.ViewsModel
+@using TeknikServis.Entity.Enums
+@model KullaniciAnketiViewModel
+@{
+    ViewBag.Title = "Anket";
+    Layout = "~/Views/Shared/_LayoutPageHome.cshtml";
+}
+<div class="container" style="padding-bottom:25px;">
+    <div class="page-header">
+        <h3 class="panel-title">
+            <span class="fa fa-question-circle"></span>     Kullanıcı Memnuniyet Anketi
+        </h3>
+    </div>
+        @foreach (var item in Model.sorular)
+        {
+            <div class="panel panel-info" id="panel-@item.ID">
+                <div class="panel-heading">
+                     @item.SoruMetni
+                 </div>
+                <div class="panel-body">
+                    <div class="col-md-offset-2 col-md-10" id="panel@(item.ID)">
+                            <div class="col-md-2">
+                                <a onclick="cevapekle(@item.ID,1)" > <img id="@(item.ID)1"  height="40" width="40" src="~/Content/images/anket/Yemoji1.png"  />  </a>
+                            </div>
+                        <div class="col-md-2">
+                            <a onclick="cevapekle(@item.ID,2)"> <img id="@(item.ID)2"   height="40" width="40" src="~/Content/images/anket/Yemoji2.png" />  </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a onclick="cevapekle(@item.ID,3)"> <img id="@(item.ID)3"  height="40" width="40" src="~/Content/images/anket/Yemoji3.png" />  </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a onclick="cevapekle(@item.ID,4)"> <img id="@(item.ID)4"   height="40" width="40" src="~/Content/images/anket/Yemoji4.png" />  </a>
+                        </div>
+                        <div class="col-md-2">
+                            <a onclick="cevapekle(@item.ID,5)"> <img id="@(item.ID)5"   height="40" width="40" src="~/Content/images/anket/Yemoji5.png" />  </a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        }
+    <button type="button" onclick="cevaplarigonder()" class="btn btn-primary pull-right btn-lg">Gönder</button>
+    </div>
+
+<script>
+    var cevaplar = [];
+    
+
+    function cevapekle(soruid, cevapid) {
+        var cevap = {};
+        for (var i = 0; i <cevaplar.length; i++) {
+            if (cevaplar[i].soruid == soruid) {
+                cevaplar[i].cevapid = cevapid;
+                secileniisaretle(soruid, cevapid);
+                return;
+            } 
+        }
+        cevap.cevapid = cevapid;
+        cevap.soruid = soruid;
+        cevap.userid = '@Model.UserID';
+        cevaplar.push(cevap);
+        secileniisaretle(soruid, cevapid);
+    }
+
+
+    function secileniisaretle(soruid, cevapid) {
+        $("#" + soruid + "1").css("background-color", "white");
+        $("#" + soruid + "2").css("background-color", "white");
+        $("#" + soruid + "3").css("background-color", "white");
+        $("#" + soruid + "4").css("background-color", "white");
+        $("#" + soruid + "5").css("background-color", "white"); 
+        $("#" + soruid + cevapid).css("background-color", "DarkGray"); 
+    }
+
+
+    function cevaplarigonder() {
+        console.log(cevaplar);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Anket","Home")',
+            data: { cevaplar },
+            success: function (res) {
+                alert("Ankete katıldığınız için teşekkür ederiz.");
+                window.location.href = '@Url.Action("Index","Home")';
+            }
+        });
+
+    }
+
+</script>

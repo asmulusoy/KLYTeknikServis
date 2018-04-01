@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TeknikServis.Entity.Entities.Ariza>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Servis Talepleri
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="arizaTablosu" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Tarih
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Baslik)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Aciklama)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CreateDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Baslik)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Aciklama)
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-success btn-sm" href="@Url.Action("Detay","ServisTalep", new {id=item.ID })">   <i class="fa fa-search"></i></a>
+                                            </td>
+                                        </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+@section SayfaSonu
+{
+    <script>
+        $(function () {
+            $("#arizaTablosu").DataTable({
+                "order":[]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,80 @@
+﻿@model IEnumerable<TeknikServis.Entity.Entities.Ariza>
+@{
+    ViewBag.Title = "DestekTalepListesi";
+    Layout = "~/Views/Shared/_LayoutPageProfile.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Tüm Destek Talepleri</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="destekTalepListesi" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th> Oluşturulma Tarihi</th>
+                                <th>Başlık</th>
+                                <th> Açıklama</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.CreateDate.ToShortDateString()
+                                </td>
+                                <td>
+                                    @if (item.Baslik.Length > 30)
+                                    {
+                                        @item.Baslik.Substring(0, 30)
+                                    }
+                                    else
+                                    {
+                                        @item.Baslik
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Aciklama.Length > 40)
+                                    {
+                                        @item.Aciklama.Substring(0, 40)
+                                    }
+                                    else
+                                    {
+                                        @item.Aciklama
+                                    }
+                                </td>
+
+
+                                <td>
+                                    <a href="@Url.Action("DestekTalepDetay","DestekTalep",new {id=item.ID })"><span class="label label-success"><i class="fa fa-search"></i></span></a>
+                              
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+@section SayfaSonu
+{
+    <script>
+        $(function() {
+            $("#destekTalepListesi").DataTable({
+                "order": []
+            });
+        })
+    </script>
+}

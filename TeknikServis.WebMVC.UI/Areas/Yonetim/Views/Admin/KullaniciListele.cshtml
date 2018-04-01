@@ -1,0 +1,78 @@
+﻿@using TeknikServis.Entity.ViewsModel.AdminViewModels
+@model List<GorevliListViewModel>
+
+@{
+    ViewBag.Title = "KullaniciListele";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Kullanıcılar
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="kullaniciListesiTablosu" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ad Soyad</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Rol</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(item.Name + " " + item.Surname)
+                                        </td>
+                                        <td>
+                                            @item.Username
+                                        </td>
+                                        <td>
+                                            @switch (item.Role)
+                                            {
+                                                case "Admin":<span class="label label-danger center-block">Admin</span>; break;
+                                                case "Operator":<span class="label label-primary center-block">Operatör</span>; break;
+                                                case "Teknisyen":<span class="label label-warning center-block">Teknisyen</span>; break;
+                                                case "User": <span class="label label-default center-block">Müşteri</span>; break;
+                                                case "Passive": <span class="label label-success center-block">Pasif</span>; break;
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("KullaniciDuzenle","Admin", new {id=item.ID })"> <span class="label label-success"><i class="fa fa-edit"></i></span></a>
+                                            <a href="@Url.Action("KullaniciSil","Admin", new {id=item.ID })">   <span class="label label-danger"><i class="fa fa-remove"></i></span></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+
+@section SayfaSonu
+{
+    <script>
+        $(function() {
+            $("#kullaniciListesiTablosu").DataTable({
+                "order": []
+            });
+        });
+    </script>
+}

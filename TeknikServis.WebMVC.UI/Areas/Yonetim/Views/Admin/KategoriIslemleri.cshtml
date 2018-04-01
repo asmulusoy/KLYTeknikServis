@@ -1,0 +1,142 @@
+﻿@using TeknikServis.Entity.Entities
+@model List<Kategori>
+@{
+    ViewBag.Title = "KategoriIslemleri";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Kategori İşlemleri
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="kategoriTablosu" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Oluşturulma Tarihi</th>
+                                    <th>Kategori Adı</th>
+
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablebody">
+                                @foreach (var item in Model)
+                                {
+                                    <tr id='@("tabletr"+@item.ID)'>
+                                        <td>
+                                            @item.CreateDate.ToLongDateString()
+                                        </td>
+                                        <td>
+                                            @item.KategoriAdi
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" onclick="duzenlenecek('@item.ID','@item.KategoriAdi')" data-target="#kategoriduzenle"><i class="fa fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="kategoriSil('@item.ID')" id="kategoriSil"><i class="fa fa-remove"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kategoriekle"><i class="fa fa-plus-circle"></i></button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+@*MODAL BAŞLANGICI YENİ KATEGORİ*@
+<div class="modal fade" id="kategoriekle" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Yeni Kategori</h4>
+            </div>
+            @using (Html.BeginForm
+                ("KategoriEkle", "Admin", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Kategori Adı</label>
+                        <input type="text" name="kategoriAdi" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@*MODAL BAŞLANGICI KATEGORİ DÜZENLE*@
+<div class="modal fade" id="kategoriduzenle" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Kategori Düzenle</h4>
+            </div>
+            @using (Html.BeginForm
+                ("KategoriDuzenle", "Admin", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Kategori Adı</label>
+                        @Html.AntiForgeryToken()
+                        <input type="text" id="kategoriAdi" name="kategoriAdi" class="form-control" value="" />
+                        <input type="text" id="duzkatid" name="duzkatid" value="" hidden />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+    
+@section SayfaSonu{
+    <script>
+        function duzenlenecek(id,ad) {
+            $("#kategoriAdi").val(ad);
+            $("#duzkatid").val(id);
+        }
+        function kategoriSil(id) {
+            $.ajax({
+                method: "POST",
+                url: "@Url.Action("KategoriSil","Admin")",
+                data: { katId: id }
+            }).done(function () { $("#tabletr" + id).remove(); }).fail(function () {
+                alert("Bir hata ile karşılaşıldı!");
+            });
+        }
+        $(function () {
+            $("#kategoriTablosu").DataTable({
+                "order": []
+            });
+        });
+        $('.main-sidebar').outerHeight($('body')[0].scrollHeight+100);//Sidebar boyutunu uzatıyoruz.
+</script>
+}

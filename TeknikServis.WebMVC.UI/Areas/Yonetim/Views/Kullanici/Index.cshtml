@@ -1,0 +1,92 @@
+﻿@*@model IEnumerable<TeknikServis.Entity.ViewsModel.AdminViewModels.GorevliListViewModel>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Kullanıcılar
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <table id="kullaniciListesiTablosu" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>  Firma Adı</th>
+                            <th>Kullanici Adı</th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Rol</th>
+                            <th>Email</th>
+                            <th>İşlem</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var item in Model)
+    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirmaAdi)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Surname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Role)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                <button type="button"><i class="fa fa-edit"></i> Ayrıntı</button>
+                                <button type="button"><i class="fa fa-search"></i> İncele</button>
+                                <button type="button"><i class="fa fa-ban"></i> Sil</button>
+                            </td>
+                        </tr>
+}*@
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+@section SayfaSonu
+{
+    <script>
+        $(function() {
+          $("#kullaniciListesiTablosu").DataTable({
+                "ajax": {
+                    "url": "Kullanicilar",
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "FirmaAdi", "autoWidth": true },
+                    { "data": "Username", "autoWidth": true },
+                    { "data": "Name", "autoWidth": true },
+                    { "data": "Surname", "autoWidth": true },
+                    { "data": "Role", "autoWidth": true },
+                    { "data": "Email", "autoWidth": true },
+                    { "data": "ID", "autoWidth": true, "render": function(data) {
+                        return "<a class='popup' href='/Kullanici/KullaniciDuzenle/" + data + "'><i class='fa fa-edit'></i></a>";
+                    }}
+                ]
+            });
+        });
+    </script>
+}

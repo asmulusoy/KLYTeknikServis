@@ -1,0 +1,81 @@
+﻿@model  TeknikServis.Entity.ViewsModel.ProfileViewModel
+@{
+    ViewBag.Title = "Profil";
+    Layout = "~/Views/Shared/_LayoutPageProfile.cshtml";
+}
+<!--<section class="content-header"></section>-->
+<!-- Main content -->
+<section class="content ">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-offset-3 col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Profil Güncelle</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    @ViewBag.sonuc
+                    @using (Html.BeginForm("Profile", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.FirmaAdi, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirmaAdi, "", new { @class = "text-danger" })
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-home "></i></span>
+                        </div>
+                        <br />
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeHolder = "Ad" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                        </div>
+                        <br />
+
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", placeHolder = "Soyad" } })
+                            @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                        </div>
+                        <br />
+
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", placeHolder = "Kullanıcı Adı" } })
+                            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        </div>
+                        <br />
+
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "form-control", placeHolder = "Telefon" } })
+                            @Html.ValidationMessageFor(model => model.Telefon, "", new { @class = "text-danger" })
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                        </div>
+                        <br />
+
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeHolder = "Email" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-primary pull-right btn-flat">Güncelle</button>
+                            </div>
+                        </div>
+
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

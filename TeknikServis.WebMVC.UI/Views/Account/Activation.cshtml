@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Üyelik Aktivasyonu";
+    Layout = "~/Views/Shared/_LayoutPageHome.cshtml";
+}
+
+
+<section class="contact-section">
+    <div class="container">
+        <div class="row-fluid" style="height:inherit;">
+            <div class="col-md-offset-3 col-md-6">
+                <div class="row comment-form centered-form">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">@Html.Raw(ViewBag.sonuc)</h3>
+                            </div>
+                            <div class="panel-body">
+                                <img class="center-block" src="~/Content/images/bx_loader.gif" />
+                                <div class="text-center panel-title">
+                                    @Html.Raw(ViewBag.icerik)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bosluk" style="height:115px;"></div>
+</section>
+<script>
+    $(function () {
+        setTimeout(function () {
+            window.location = "/Home/Index";
+        }, 3000);
+    });
+</script>
+
+
+

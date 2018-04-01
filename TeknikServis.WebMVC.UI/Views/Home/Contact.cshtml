@@ -1,0 +1,51 @@
+﻿@model TeknikServis.Entity.ViewsModel.ContactMailModel
+@{
+    ViewBag.Title = "İletişim";
+    Layout = "~/Views/Shared/_LayoutPageHome.cshtml";
+}
+<!-- contact section
+        ================================================== -->
+<section class="contact-section">
+    <div class="container">
+        <div class="col-md-8">
+            @using (Html.BeginForm("Contact", "Home", FormMethod.Post, new { id = "contact-form" }))
+            {
+                @Html.AntiForgeryToken()
+               
+                    @Html.ValidationSummary()
+                
+                <h2>Mesaj Gönderin</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(x => x.GonderenAd, new { placeholder = "İsim" })
+                        <!--<input name="GonderenAd" id="name" type="text" placeholder="İsim">-->
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(x => x.GonderenEmail, new { placeholder = "Email" })
+                      <!--  <input name="GonderenEmail" id="mail" type="text" placeholder="Email">-->
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(x => x.Telefon, new { placeholder = "Telefon" })
+                       <!--    <input name="Telefon" id="tel-number" type="text" placeholder="Telefon">-->
+                    </div>
+                </div>
+                @Html.TextAreaFor(x=>x.Mesaj, new { placeholder="Mesaj"})
+             <!--  <textarea name="Mesaj" id="comment" placeholder="Mesaj"></textarea>-->
+                <button type="submit" class="btn btn-lg">Gönder</button>
+                
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="contact-info">
+                <h2>İletişim Bilgileri</h2>
+                <p>Haftaiçi 8:00 - 19:00 saatleri arası ofis adresimizden bize ulaşabilirsiniz.</p>
+                <ul class="information-list">
+                    <li><i class="fa fa-map-marker"></i><span>KLY Teknik Servis 25662 İstanbul,Beşiktaş, NO:9 TURKİYE.</span></li>
+                    <li><i class="fa fa-phone"></i><span>+1 223 334 3434</span><span>+1 605-315-8544</span></li>
+                    <li><i class="fa fa-envelope-o"></i><a href="#">info@klyteknikservis.com</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End contact section -->

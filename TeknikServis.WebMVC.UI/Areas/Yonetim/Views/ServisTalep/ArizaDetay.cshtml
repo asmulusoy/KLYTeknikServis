@@ -1,0 +1,214 @@
+﻿@using TeknikServis.Entity.ViewsModel.AdminViewModels
+@using TeknikServis.Entity.Enums
+@model  ArizaDetayViewModel
+@{
+    ViewBag.Title = "ArizaDetay";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Arıza Detayları
+            <small>Firma Adı : @Model.User.FirmaAdi</small>
+        </h1>
+    </section>
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2 class="page-header">
+                            <i class="fa fa-globe"></i>KLY Teknik Servis
+                            <small class="pull-right">Oluşturulma Tarihi : @Model.Ariza.CreateDate.ToShortDateString()</small>
+                        </h2>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- info row -->
+                <div class="row invoice-info">
+                    <div class="col-sm-6 invoice-col">
+
+                        <address>
+                            <strong>Kullanıcı Bilgileri</strong><br>
+                            <strong>Ad :</strong> @Model.User.Name<br>
+                            <strong>Soyad :</strong> @Model.User.SurName<br>
+                            <strong>Telefon :</strong> @Model.User.PhoneNumber<br>
+                            <strong>Email :</strong>@Model.User.Email
+                        </address>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col">
+                        <address>
+                            <strong>Adres Açıklaması</strong><br>
+                            @Model.Ariza.AdresAciklamasi
+                        </address>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row row invoice-info">
+                            <div class="col-md-12">
+                                <h2 class="page-header">
+                                    <i class="fa fa-cog"></i>Arıza Açıklaması
+                                </h2>
+                                <p>
+                                    @Model.Ariza.Aciklama
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xs-12">
+                        <h2 class="page-header">
+                            <i class="fa fa-photo"></i> Arıza Fotoğrafları
+                        </h2>
+                        <div style="height:100px;overflow-y:auto;">
+                            @foreach (var item in @Model.FotografList)
+                            {<div class="col-xs-6 col-sm-3">
+                                    <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">
+                                        <img src="@item.URL" height="100" width="100" alt="@item.ArızaID">
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <div class="col-md-5">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Konumu</div>
+                    <div class="panel-body" id="map" style="height:200px;"></div>
+                    <div class="panel-body" id="right-panel" style="height:200px;overflow-y:auto"></div>
+                    <span hidden id="lat">@Model.Ariza.lat</span>
+                    <span hidden id="long">@Model.Ariza.lng</span>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Durum</th>
+                            <th>Açıklama</th>
+                            <th>@ViewBag.durumlar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.DurumListesi)
+                        {
+                            <tr>
+                                <td>@item.CreateDate.ToString("f")</td>
+                                <td>@item.Durum</td>
+                                <td style="overflow-y:auto;">@item.Aciklama</td>
+                            </tr>
+                        }
+                        <tr>
+                            @using (Html.BeginForm("DurumEkle", "ServisTalep", FormMethod.Post))
+                            {
+                                <td>@DateTime.Now.ToString("f")</td>
+                                <td>
+                                    <input type="text" name="Ariza_ID" value="@Model.Ariza.ID" hidden />
+                                    <input type="text" name="user_ID" value="@Model.User.Id" hidden />
+                                    <input type="text" name="teknisyen_ID" value="@Model.Teknisyen.Id" hidden />
+
+                                    <select name="durumId" class="form-control">
+                                        @foreach (SelectListItem durum in EnumHelper.GetSelectList(typeof(ArizaDurumlari)))
+                                        {
+                                            <option value="@durum.Value">@durum.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                                @*<td>@Html.DropDownList("ArizaDurumlari", EnumHelper.GetSelectList(typeof(ArizaDurumlari)), new { @class = "form-control" }) </td >*@
+                                <td><input type="text" name="durumIcerik" class="form-control" /></td>
+                                <td><button type="submit" class="btn btn-primary">Ekle </button></td>
+                            }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+</section>
+<!--LIGTBOX-->
+<div id="lightbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <button type="button" class="close hidden" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="" alt="" />
+            </div>
+        </div>
+    </div>
+</div>
+<!--LIGTBOX-->
+<!-- /.content -->
+<div class="clearfix"></div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAP53g7yo4Rm0Fc5qFg7_iiK3k8AWSNuyE&libraries=places&sensor=false" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var mapdiv = document.getElementById("map");
+    if (navigator.geolocation) {
+
+        var watchoptions = {
+            enableHighAccuracy: true,
+            timeout: 1000,
+            maximumAge: 0
+        };
+        navigator.geolocation.watchPosition(function (position) {
+            console.log(position);
+            var konum = $("#lat").text() + "," + $("#long").text();
+            console.log("-******************" + konum);
+            var myposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var arizapos = new google.maps.LatLng($("#lat").text(), $("#long").text());
+            navigasyon(myposition, arizapos);
+        });
+    }
+    else {
+        alert("Tarayıcınız desteklemiyor. Tarayıcınızı güncelleyiniz");
+    }
+
+    function navigasyon(origin, destination) {
+        console.log("tetik");
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var mapdiv = document.getElementById("map");
+        var rigthpanel = document.getElementById("right-panel");
+        mapdiv.innerHTML = "";
+        rigthpanel.innerHTML = "";
+        var mapOptions = {
+            zoom: 17,
+            center: origin,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(mapdiv, mapOptions);
+        var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+        directionsService.route({
+            origin: origin,
+            destination: destination,
+            travelMode: 'DRIVING'
+        }, function (response, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                google.maps.event.trigger(map, 'resize');
+            } else {
+                alert("Rota oluşturulamadı " + status);
+            }
+        });
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(rigthpanel);
+    }
+
+</script>

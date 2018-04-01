@@ -1,0 +1,86 @@
+﻿@using TeknikServis.Entity.ViewsModel.AdminViewModels
+@model  KullaniciDuzenleViewModel
+@{
+    ViewBag.Title = "KullaniciDuzenle";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Kullanıcı Düzenle
+        </h1>
+
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-offset-2  col-md-6">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Kullanıcı Bilgileri</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    @using (@Html.BeginForm("KullaniciDuzenle", "Admin", FormMethod.Post))
+                    {
+                        <div class="box-body">
+                            @Html.AntiForgeryToken()
+
+                            @Html.ValidationSummary()
+                            @Html.HiddenFor(x=>x.ID)
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building"></i>Şirket Adı</span>
+                                @Html.EditorFor(x => x.FirmaAdi, new { htmlAttributes = new { @class = "form-control", placeholder = "Ad" } })
+                            </div>
+                            <br>
+
+                            <div class="input-group">
+                                <span class="input-group-addon">Ad</span>
+                                @Html.EditorFor(x => x.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Ad" } })
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">Soyad</span>
+                                @Html.EditorFor(x => x.Surname, new { htmlAttributes = new { @class = "form-control", placeholder = "Soyad" } })
+                            </div>
+
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                @Html.EditorFor(x => x.Username, new { htmlAttributes = new { @class = "form-control", placeholder = "Kullanıcı Adı" } })
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                @Html.EditorFor(x => x.Email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "Email adresi" } })
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                @Html.EditorFor(x => x.Telefon, new { htmlAttributes = new { @class = "form-control", type = "phone", placeholder = "Telefon numarası" } })
+                            </div>
+                            <br>
+                           
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i>Rol</span>
+                                @Html.DropDownListFor(x => x.RoleID, (List<SelectListItem>)ViewBag.roller, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary pull-right">Kaydet</button>
+                        </div>
+                    }
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </section>
+</div>
+

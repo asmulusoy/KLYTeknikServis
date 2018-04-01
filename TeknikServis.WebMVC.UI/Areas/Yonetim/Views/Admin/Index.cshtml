@@ -1,0 +1,174 @@
+﻿@using TeknikServis.Entity.ViewsModel.AdminViewModels
+@model  AdminGenelBakisViewModel
+
+@{ 
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Yonetim/Views/Shared/_LayoutPageYonetim.cshtml";
+} <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Genel Bakış
+        </h1>
+       
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">GİDERİLMİŞ ARIZA</span>
+                        <span class="info-box-number">@Model.giderilmisTalep</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="fa fa-times"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">İPTAL EDİLMİŞ ARIZA</span>
+                        <span class="info-box-number">@Model.iptalEdilmisTalep</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!-- fix for small devices only -->
+            <div class="clearfix visible-sm-block"></div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua-active"><i class="fa fa-list"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">OPERATÖRDE</span>
+                        <span class="info-box-number">@Model.operatordeBekleyen</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-yellow"><i class="fa fa-cogs"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">TEKNİSYENDE</span>
+                        <span class="info-box-number">@Model.teknisyendeBekleyen</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- ADMİN LIST -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Adminler</h3>
+                        <div class="box-tools pull-right">
+                            <span class="label label-danger">@Model.Adminler.Count</span>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding" style="">
+                        <ul class="users-list clearfix">
+                            @foreach (var item in Model.Adminler) {
+                            <li>
+                                <img src="~/Content/AdminLTE/images/admin.png" alt="User Image">
+                                <a class="users-list-name" href="#">@item.Name</a>
+                                <span class="users-list-date">@item.PhoneNumber</span>
+                            </li>
+                            }
+                            </ul>
+                    <!-- /.box-footer -->
+                </div>
+                <!--/.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+            <div class="col-md-4">
+                <!-- OPERATOR LIST -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Operatörler</h3>
+
+                        <div class="box-tools pull-right">
+                            <span class="label label-danger">@Model.Operatorler.Count</span>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding" style="">
+                        <ul class="users-list clearfix">
+                            @foreach (var item in Model.Operatorler)
+                            {
+                                <li>
+                                    <img src="~/Content/AdminLTE/images/admin.png" alt="User Image">
+                                    <a class="users-list-name" href="#">@item.Name</a>
+                                    <span class="users-list-date">@item.PhoneNumber</span>
+                                </li>
+                            }
+                        </ul>
+                        <!-- /.box-footer -->
+                    </div>
+                    <!--/.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+            <div class="col-md-4">
+                <!-- TEKNİSYEN LIST -->
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Teknisyenler</h3>
+
+                        <div class="box-tools pull-right">
+                            <span class="label label-danger">@Model.Teknisyenler.Count</span>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding" style="">
+                        <ul class="users-list clearfix">
+                            @foreach (var item in Model.Teknisyenler)
+                            {
+                                <li>
+                                    <img src="~/Content/AdminLTE/images/admin.png" alt="User Image">
+                                    <a class="users-list-name" href="#">@item.Name</a>
+                                    <span class="users-list-date">@item.PhoneNumber</span>
+                                </li>
+                            }
+                        </ul>
+                        <!-- /.box-footer -->
+                    </div>
+                    <!--/.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+        
+            </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
